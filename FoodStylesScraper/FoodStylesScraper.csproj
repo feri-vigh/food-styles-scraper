@@ -10,5 +10,11 @@
     <ProjectReference Include="..\FoodStylesScraper.Engine\FoodStylesScraper.Engine\FoodStylesScraper.Engine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="chromedriver.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>

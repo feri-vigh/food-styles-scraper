@@ -1,9 +1,7 @@
 ﻿using FoodStylesScraper.Contracts;
-using FoodStylesScraper.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 
 namespace FoodStylesScraper.Controllers
 {
