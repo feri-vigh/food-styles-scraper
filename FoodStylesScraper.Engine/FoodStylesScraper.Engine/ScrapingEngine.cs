@@ -23,41 +23,82 @@ namespace FoodStylesScraper.Engine
 
         public List<MenuItemDto> ScrapeMenu(string menuUrl)
         {
+            menuUrl = RemoveTrailingSlash(menuUrl);
+
             using (var driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)))
             {
                 driver.Manage().Window.Size = new Size(1600, 1200);
                 driver.Navigate().GoToUrl(menuUrl);
 
+                var menuLinks = GetMenuLinks(driver);
+                menuLinks.Remove(menuUrl);
+                menuLinks.Insert(0, menuUrl);
+
                 var result = new List<MenuItemDto>();
 
-                var activeMenuTitle = GetActiveMenuItemText(driver);
-                var menuDescription = GetMenuDescription(driver);
-
-                var mainContent = GetMainContent(driver);
-                if (mainContent == null)
-                    return new List<MenuItemDto>();
-
-                var menuTitles = GetMenuTitles(mainContent);
-
-                foreach (var menuTitle in menuTitles)
+                foreach (var menuLink in menuLinks)
                 {
-                    var menuSectionTitle = GetMenuTitleText(menuTitle);
-                    var menuSectionId = GetMenuSectionId(menuTitle);
+                    if (RemoveTrailingSlash(driver.Url) != menuLink)
+                        driver.Navigate().GoToUrl(menuLink);
 
-                    var dishes = GetMenuSectionDishes(mainContent, menuSectionId);
+                    var activeMenuTitle = GetActiveMenuItemText(driver);
+                    var menuDescription = GetMenuDescription(driver);
 
-                    foreach (var dish in dishes)
+                    var mainContent = GetMainContent(driver);
+                    if (mainContent == null)
+                        return new List<MenuItemDto>();
+
+                    var menuTitles = GetMenuTitles(mainContent);
+                    var detailPageUrls = new Dictionary<string, string>();
+
+                    if (menuTitles.Any())
                     {
-                        var dto = new MenuItemDto
+                        foreach (var menuTitle in menuTitles)
                         {
-                            MenuTitle = activeMenuTitle,
-                            MenuDescription = menuDescription,
-                            MenuSectionTitle = menuSectionTitle,
-                            DishName = dish.GetAttribute("title"),
-                            DishDescription = GetMenuSectionDishDescription(dish)
-                        };
+                            var menuSectionTitle = GetMenuTitleText(menuTitle);
+                            var menuSectionId = GetMenuSectionId(menuTitle);
 
-                        result.Add(dto);
+                            var dishes = GetMenuSectionDishesBySectionId(mainContent, menuSectionId);
+
+                            foreach (var dish in dishes)
+                            {
+                                var dishName = dish.GetAttribute("title");
+                                if (string.IsNullOrWhiteSpace(dishName))
+                                    continue;
+
+                                var dto = new MenuItemDto(activeMenuTitle, menuDescription, dishName) { MenuSectionTitle = menuSectionTitle, };
+
+                                detailPageUrls.Add(dto.DishName, dish.GetAttribute("href"));
+
+                                result.Add(dto);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var dishes = GetMenuSectionDishes(mainContent);
+
+                        foreach (var dish in dishes)
+                        {
+                            var dishName = dish.GetAttribute("title");
+                            if (string.IsNullOrWhiteSpace(dishName))
+                                continue;
+
+                            var dto = new MenuItemDto(activeMenuTitle, menuDescription, dishName);
+
+                            detailPageUrls.Add(dto.DishName, dish.GetAttribute("href"));
+
+                            result.Add(dto);
+                        }
+                    }
+
+                    foreach (var dto in result)
+                    {
+                        var url = detailPageUrls.ContainsKey(dto.DishName) ? detailPageUrls[dto.DishName] : null;
+                        if (string.IsNullOrWhiteSpace(url))
+                            continue;
+
+                        dto.DishDescription = GetDishDescription(driver, url);
                     }
                 }
 
@@ -65,13 +106,36 @@ namespace FoodStylesScraper.Engine
             }
         }
 
+        private List<string> GetMenuLinks(ChromeDriver driver)
+        {
+            try
+            {
+                var menuItems = driver.FindElements(By.XPath("//nav[contains(@class, 'navbar')]//ul[contains(@class, 'submenu')]//li//a"));
+
+                logger.LogInformation($"Located menu items.");
+
+                return menuItems.Select(mi => mi.GetAttribute("href")).Select(url => RemoveTrailingSlash(url)).ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error locating menu items. {ex.Message}", ex);
+                return new List<string>();
+            }
+        }
+
+        private string RemoveTrailingSlash(string url)
+        {
+            if (!string.IsNullOrEmpty(url) && url.EndsWith(@"/"))
+                url = url.Substring(0, url.Length - 1);
+
+            return url;
+        }
+
         private string GetActiveMenuItemText(ChromeDriver driver)
         {
             try
             {
-                var navbar = driver.FindElement(By.ClassName("navbar"));
-                var subMenu = navbar.FindElement(By.ClassName("submenu"));
-                var activeMenu = subMenu.FindElement(By.ClassName("active"));
+                var activeMenu = driver.FindElement(By.XPath("//nav[contains(@class, 'navbar')]//ul[contains(@class, 'submenu')]//li//a[contains(@class, 'active')]"));
 
                 logger.LogInformation($"Located active menu item with Text = {activeMenu.Text}");
 
@@ -159,7 +223,7 @@ namespace FoodStylesScraper.Engine
             {
                 var menuTitleAnchor = menuTitle.FindElement(By.XPath("a"));
                 var id = menuTitleAnchor.GetAttribute("href");
-                
+
                 if (string.IsNullOrWhiteSpace(id))
                     return string.Empty;
 
@@ -180,13 +244,13 @@ namespace FoodStylesScraper.Engine
             }
         }
 
-        private List<IWebElement> GetMenuSectionDishes(IWebElement mainContent, string menuSectionId)
+        private List<IWebElement> GetMenuSectionDishesBySectionId(IWebElement mainContent, string menuSectionId)
         {
             try
             {
                 var anchors = mainContent.FindElements(By.XPath($"//div[contains(@id, '{menuSectionId}')]//div[contains(@class, 'menu-item')]//a"));
 
-                logger.LogInformation($"Located menu section anchors.");
+                logger.LogInformation($"Located menu section anchors for section id = {menuSectionId}.");
 
                 return anchors.ToList();
             }
@@ -197,10 +261,40 @@ namespace FoodStylesScraper.Engine
             }
         }
 
-        private string GetMenuSectionDishDescription(IWebElement dishElement)
+        private List<IWebElement> GetMenuSectionDishes(IWebElement mainContent)
         {
-            // TODO - click on element and get description
-            return string.Empty;
+            try
+            {
+                var anchors = mainContent.FindElements(By.XPath("//div[contains(@class, 'menu-item')]//a"));
+
+                logger.LogInformation($"Located menu section anchors.");
+
+                return anchors.ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error locating menu section anchors. {ex.Message}", ex);
+                return new List<IWebElement>();
+            }
+        }
+
+        private string GetDishDescription(ChromeDriver driver, string url)
+        {
+            try
+            {
+                driver.Navigate().GoToUrl(url);
+
+                var descriptionParagraph = driver.FindElement(By.XPath("//main[contains(@class, 'main-content')]//article[contains(@class, 'menu-item-details')]//div//p"));
+
+                logger.LogInformation($"Navigated to details page and got description for Url = {url}.");
+
+                return descriptionParagraph.Text;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error getting dish description. {ex.Message}", ex);
+                return string.Empty;
+            }
         }
     }
 }
