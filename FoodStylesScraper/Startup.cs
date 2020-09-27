@@ -1,7 +1,10 @@
+using FoodStylesScraper.Data;
+using FoodStylesScraper.Data.Extensions;
 using FoodStylesScraper.Engine.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +25,7 @@ namespace FoodStylesScraper
         {
             services.AddControllers();
             services.AddFoodStylesScrapingEngine();
+            services.AddFoodStylesScraperData(Configuration.GetConnectionString("FoodStylesScraperDb"));
 
             services.AddSwaggerGen();
         }
@@ -52,6 +56,11 @@ namespace FoodStylesScraper
                 endpoints.MapGet("/", async context => await context.Response.WriteAsync("Food Styles Scraper now running."));
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<FoodStyleScraperContext>().Database.Migrate();
+            }
         }
     }
 }

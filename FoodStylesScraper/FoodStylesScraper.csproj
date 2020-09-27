@@ -5,12 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FoodStylesScraper.Contracts\FoodStylesScraper.Contracts\FoodStylesScraper.Contracts.csproj" />
+    <ProjectReference Include="..\FoodStylesScraper.Data\FoodStylesScraper.Data\FoodStylesScraper.Data.csproj" />
     <ProjectReference Include="..\FoodStylesScraper.Dto\FoodStylesScraper.Dto\FoodStylesScraper.Dto.csproj" />
     <ProjectReference Include="..\FoodStylesScraper.Engine\FoodStylesScraper.Engine\FoodStylesScraper.Engine.csproj" />
   </ItemGroup>
