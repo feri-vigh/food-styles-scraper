@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30330.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodStylesScraper", "FoodStylesScraper\FoodStylesScraper.csproj", "{78BFDFCC-9588-4A75-92F5-746CE62F5575}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodStylesScraper.Dto", "FoodStylesScraper.Dto\FoodStylesScraper.Dto\FoodStylesScraper.Dto.csproj", "{D127CECB-EE26-461E-B2DC-85DA614848E0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78BFDFCC-9588-4A75-92F5-746CE62F5575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78BFDFCC-9588-4A75-92F5-746CE62F5575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78BFDFCC-9588-4A75-92F5-746CE62F5575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78BFDFCC-9588-4A75-92F5-746CE62F5575}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D127CECB-EE26-461E-B2DC-85DA614848E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D127CECB-EE26-461E-B2DC-85DA614848E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D127CECB-EE26-461E-B2DC-85DA614848E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D127CECB-EE26-461E-B2DC-85DA614848E0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85E1E47C-509E-4606-A724-92C6798A240D}
+	EndGlobalSection
+EndGlobal
