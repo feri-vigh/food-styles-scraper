@@ -34,12 +34,16 @@ namespace FoodStylesScraper.Engine
                 menuLinks.Remove(menuUrl);
                 menuLinks.Insert(0, menuUrl);
 
+                logger.LogInformation("Located menu links.");
+
                 var result = new List<MenuItemDto>();
 
                 foreach (var menuLink in menuLinks)
                 {
                     if (RemoveTrailingSlash(driver.Url) != menuLink)
                         driver.Navigate().GoToUrl(menuLink);
+
+                    logger.LogInformation($"Porcessing {menuLink}...");
 
                     var activeMenuTitle = GetActiveMenuItemText(driver);
                     var menuDescription = GetMenuDescription(driver);
@@ -100,6 +104,8 @@ namespace FoodStylesScraper.Engine
 
                         dto.DishDescription = GetDishDescription(driver, url);
                     }
+
+                    logger.LogInformation($"Porcessed {menuLink}.");
                 }
 
                 return result;

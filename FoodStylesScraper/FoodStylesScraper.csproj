@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FoodStylesScraper.Contracts\FoodStylesScraper.Contracts\FoodStylesScraper.Contracts.csproj" />
     <ProjectReference Include="..\FoodStylesScraper.Dto\FoodStylesScraper.Dto\FoodStylesScraper.Dto.csproj" />
     <ProjectReference Include="..\FoodStylesScraper.Engine\FoodStylesScraper.Engine\FoodStylesScraper.Engine.csproj" />
