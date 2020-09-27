@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FoodStylesScraper.Contracts\FoodStylesScraper.Contracts\FoodStylesScraper.Contracts.csproj" />
     <ProjectReference Include="..\FoodStylesScraper.Dto\FoodStylesScraper.Dto\FoodStylesScraper.Dto.csproj" />
+    <ProjectReference Include="..\FoodStylesScraper.Engine\FoodStylesScraper.Engine\FoodStylesScraper.Engine.csproj" />
   </ItemGroup>
 
 

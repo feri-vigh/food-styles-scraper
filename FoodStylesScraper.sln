@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30330.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodStylesScraper", "FoodStylesScraper\FoodStylesScraper.csproj", "{78BFDFCC-9588-4A75-92F5-746CE62F5575}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodStylesScraper", "FoodStylesScraper\FoodStylesScraper.csproj", "{78BFDFCC-9588-4A75-92F5-746CE62F5575}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodStylesScraper.Dto", "FoodStylesScraper.Dto\FoodStylesScraper.Dto\FoodStylesScraper.Dto.csproj", "{D127CECB-EE26-461E-B2DC-85DA614848E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodStylesScraper.Dto", "FoodStylesScraper.Dto\FoodStylesScraper.Dto\FoodStylesScraper.Dto.csproj", "{D127CECB-EE26-461E-B2DC-85DA614848E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodStylesScraper.Contracts", "FoodStylesScraper.Contracts\FoodStylesScraper.Contracts\FoodStylesScraper.Contracts.csproj", "{90ECFCC6-B731-42BF-AAF3-5DE0CE930567}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodStylesScraper.Engine", "FoodStylesScraper.Engine\FoodStylesScraper.Engine\FoodStylesScraper.Engine.csproj", "{C89EDDA2-A737-4552-A49B-C13166D6219D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{D127CECB-EE26-461E-B2DC-85DA614848E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D127CECB-EE26-461E-B2DC-85DA614848E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D127CECB-EE26-461E-B2DC-85DA614848E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90ECFCC6-B731-42BF-AAF3-5DE0CE930567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90ECFCC6-B731-42BF-AAF3-5DE0CE930567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90ECFCC6-B731-42BF-AAF3-5DE0CE930567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90ECFCC6-B731-42BF-AAF3-5DE0CE930567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C89EDDA2-A737-4552-A49B-C13166D6219D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C89EDDA2-A737-4552-A49B-C13166D6219D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C89EDDA2-A737-4552-A49B-C13166D6219D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C89EDDA2-A737-4552-A49B-C13166D6219D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

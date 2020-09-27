@@ -1,4 +1,5 @@
-﻿using FoodStylesScraper.Dto;
+﻿using FoodStylesScraper.Contracts;
+using FoodStylesScraper.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,10 +12,14 @@ namespace FoodStylesScraper.Controllers
     public class ScrapeController : ControllerBase
     {
         private readonly ILogger<ScrapeController> logger;
+        private readonly IScrapingEngine scrapingEngine;
 
-        public ScrapeController(ILogger<ScrapeController> logger)
+        public ScrapeController(
+            ILogger<ScrapeController> logger,
+            IScrapingEngine scrapingEngine)
         {
             this.logger = logger;
+            this.scrapingEngine = scrapingEngine;
         }
 
         [HttpPost]
@@ -22,19 +27,9 @@ namespace FoodStylesScraper.Controllers
         {
             try
             {
-                var result = new List<MenuItemDto>
-                {
-                    new MenuItemDto
-                    {
-                        MenuTitle = "Breakfast",
-                        MenuDescription = "Our nutritious breakfasts are served in seconds and last until lunch...",
-                        MenuSectionTitle = "Super Eggs",
-                        DishName = "Super Eggs",
-                        DishDescription = "Free-range egg omelette, rolled and filled with avocado, roquito peppers, edamame, spinach and free-range egg mayonnaise."
-                    }
-                };
+                var results = scrapingEngine.ScrapeMenu(parameters.MenuUrl);
 
-                return Ok(result);
+                return Ok(results);
             }
             catch (Exception ex)
             {
