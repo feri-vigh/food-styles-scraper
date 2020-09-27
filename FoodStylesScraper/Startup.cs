@@ -22,6 +22,8 @@ namespace FoodStylesScraper
         {
             services.AddControllers();
             services.AddFoodStylesScrapingEngine();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +35,13 @@ namespace FoodStylesScraper
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Food Styles Scraper");
+            });
 
             app.UseRouting();
 
